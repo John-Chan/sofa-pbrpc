@@ -7,6 +7,7 @@
 #ifndef _SOFA_PBRPC_COMMON_H_
 #define _SOFA_PBRPC_COMMON_H_
 
+#include <stdarg.h>
 #include <google/protobuf/stubs/common.h>
 
 #include <sofa/pbrpc/smart_ptr/smart_ptr.hpp>
@@ -63,6 +64,23 @@ enum LogLevel {
     LOG_LEVEL_DEBUG   = 5,
 };
 
+typedef void LogHandler(LogLevel level, const char* filename, int line,
+                        const char *fmt, va_list ap);
+
+// The sofa pbrpc may writes warning and error messages to help
+// developer figure out bugs. By default the messages are written to
+// stderr. If you prefer to write messages to somewhere other than stderr,
+// call set_log_handler() and it returns old handler.
+// Set the handler to NULL to ignore log messages.
+//
+// The function is not thread-safe. You should call it at the beginning of
+// the program.
+//
+// CAVEAT: The behavior of calling va_end(ap) in handler function
+// is undefined. 
+// The library will do that at the end of message writing
+LogHandler* set_log_handler(LogHandler* new_func);
+
 namespace internal {
 LogLevel get_log_level();
 void set_log_level(LogLevel level);
@@ -81,7 +99,7 @@ void log_handler(LogLevel level, const char* filename, int line, const char *fmt
     !(condition) ? (void)0 : ::sofa::pbrpc::internal::log_handler( \
             ::sofa::pbrpc::LOG_LEVEL_##level, __FILE__, __LINE__, fmt, ##arg)
 
-#if defined( LOG )
+#if defined( _LOGGING_H_ )
 #define SCHECK(expression) CHECK(expression)
 #define SCHECK_EQ(a, b) CHECK_EQ(a, b)
 #define SCHECK_NE(a, b) CHECK_NE(a, b)

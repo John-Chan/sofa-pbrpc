@@ -33,7 +33,7 @@ public:
         , _endpoint(endpoint)
         , _endpoint_str(RpcEndpointToString(endpoint))
         , _acceptor(io_service)
-        , _is_closed(false)
+        , _is_closed(true)
     {
         SOFA_PBRPC_INC_RESOURCE_COUNTER(RpcListener);
     }
@@ -107,6 +107,20 @@ public:
             return false;
         }
 
+        int ret = fcntl(_acceptor.native(), F_SETFD, 
+                        fcntl(_acceptor.native(), F_GETFD) | FD_CLOEXEC);
+        if (ret < 0)
+        {
+#if defined( LOG )
+            LOG(ERROR) << "start_listen(): make fd close_on_exec failed: "
+                       << _endpoint_str << ": " << strerror(errno);
+#else
+            SLOG(ERROR, "start_listen(): make fd close_on_exec failed: %s: %s",
+                    _endpoint_str.c_str(), strerror(errno));
+#endif
+            return false;
+        }
+
         _acceptor.set_option(tcp::acceptor::reuse_address(true), ec);
         if (ec)
         {
@@ -152,6 +166,7 @@ public:
 #else
         SLOG(INFO, "start_listen(): listen succeed: %s", _endpoint_str.c_str());
 #endif
+        _is_closed = false;
 
         async_accept();
 

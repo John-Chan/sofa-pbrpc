@@ -4,6 +4,7 @@
 //
 // Author: qinzuoyan01@baidu.com (Qin Zuoyan)
 
+#include <stdio.h>
 #include <stdlib.h>
 #include <signal.h>
 #include <unistd.h>
@@ -68,8 +69,10 @@ int main(int argc, char** argv)
         }
         if (response->message().size() != request->message().size()
                 || response->message().at(0) != request->message().at(0)
+                || response->message().at(response->message().size() / 2)
+                   != request->message().at(request->message().size() / 2)
                 || response->message().at(response->message().size() - 1)
-                != request->message().at(request->message().size() - 1)) {
+                   != request->message().at(request->message().size() - 1)) {
             SLOG(ERROR, "response not matched");
             break;
         }

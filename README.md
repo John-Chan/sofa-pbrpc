@@ -1,8 +1,10 @@
 sofa-pbrpc
 ==========
+[![Build Status](https://travis-ci.org/baidu/sofa-pbrpc.svg)](https://travis-ci.org/baidu/sofa-pbrpc)
+
 A light-weight RPC implement of google protobuf RPC framework.
 
-Wiki: https://github.com/BaiduPS/sofa-pbrpc/wiki
+Wiki: https://github.com/baidu/sofa-pbrpc/wiki
 
 ### Features
 * High performace.
@@ -18,6 +20,7 @@ Wiki: https://github.com/BaiduPS/sofa-pbrpc/wiki
 * Support multi-server load balance and fault tolerance.
 * Support http protocol.
 * Provide web monitor.
+* Provide python client library.
 
 ### Dependings
 This lib depends on boost-1.53.0 (only need header), protobuf-2.4.1, snappy and zlib:
@@ -50,5 +53,5 @@ For sample codes, please refer to './sample' and the wiki.
 For performace details, please refer to the wiki.
 
 ### Support
-openps@baidu.com
+opensearch@baidu.com
 

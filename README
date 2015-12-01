@@ -19,6 +19,7 @@ Features
 * Support multi-server load balance and fault tolerance.
 * Support http protocol.
 * Provide web monitor.
+* Provide python client library.
 
 Dependings
 ----------
@@ -56,5 +57,5 @@ For performace details, please refer to the wiki.
 
 Support
 -------
-openps@baidu.com
+opensearch@baidu.com
 
